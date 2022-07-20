@@ -1,0 +1,114 @@
+.hero {
+  background: linear-gradient(249.8deg, #4042E2 25.08%, #4F52FF 167.4%);
+  position: relative;
+  background-image: url(../assets/images/hero_bg.png), linear-gradient(249.8deg, #4042E2 25.08%, #4F52FF 167.4%);
+  background-position: right bottom;
+  background-repeat: no-repeat;
+  background-size: 25%, cover;
+  display: flex;
+  align-items: center;
+}
+
+.footer {
+  background: linear-gradient(249.8deg, #4042E2 25.08%, #4F52FF 167.4%);
+  position: relative;
+  background-image: url(../assets/images/footer_bg.svg), linear-gradient(249.8deg, #4042E2 25.08%, #4F52FF 167.4%);
+  background-position: right bottom;
+  background-repeat: no-repeat;
+  background-size: 20%, cover;
+  display: flex;
+  flex-direction: column;
+  padding-top: 80px;
+  padding-bottom: 80px;
+  overflow: hidden;
+  color: #FFFFFF;
+}
+
+.nav {
+  background: rgba(0, 0, 0, 0.05);
+  color: #ffffff;
+  position: absolute;
+  width: 100%;
+  top: 0;
+}
+
+.headline {
+  color: #ffffff;
+}
+
+@media (max-width: 960px) {
+  .hero {
+    background-image: linear-gradient(249.8deg, #4042E2 25.08%, #4F52FF 167.4%);
+    background-size: 100%;
+  }
+
+  .footer {
+    background-size: 40%, cover;
+  }
+
+  .nav {
+    z-index: 999;
+  }
+}
+
+.spotGradient {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  left: -40px;
+  top: auto;
+  bottom: auto;
+  background: #A6CCF3;
+  opacity: 0.4;
+  filter: blur(120px);
+}
+
+.mainIntro {
+  background: #FFF;
+  padding-top: 40px;
+  padding-bottom: 40px;
+}
+
+.introItemLeft {
+  background-image: url(../assets/images/corner_pattern.svg);
+  background-position: left top;
+  background-repeat: no-repeat;
+  background-size: 60px 60px;
+}
+
+.introItemBottomLeft {
+  background-image: url(../assets/images/corner_bottom_left.svg);
+  background-position: left bottom;
+  background-repeat: no-repeat;
+  background-size: 60px 60px;
+}
+
+.introItemBottomRight {
+  background-image: url(../assets/images/corner_bottom_right.svg);
+  background-position: right bottom;
+  background-repeat: no-repeat;
+  background-size: 60px 60px;
+}
+
+.footerTitle {
+  font-weight: 600;
+  color: #FFFFFF;
+  font-size: 0.875rem;
+}
+
+.footerLink {
+  color: #E9E6E5;
+  font-weight: 300;
+  cursor: pointer;
+  font-size: 0.875rem;
+}
+
+.footerLink:hover {
+  color: #FFFFFF;
+}
+
+.menuWrapper {
+  background: transparent;
+  backdrop-filter: blur(50px);
+  -webkit-backdrop-filter: blur(50px);
+}

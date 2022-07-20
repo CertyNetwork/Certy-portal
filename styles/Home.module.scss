@@ -1,0 +1,55 @@
+.profilePicture > span {
+  display: block !important;
+  overflow: visible !important;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  & > label {
+    font-size: 0.875rem;
+    color: #1C1F27;
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  & + .form-group {
+    margin-top: 16px;
+  }
+
+  input.form-control {
+    font-size: 1rem;
+    color: #1a1d1f;
+    background: #ffffff;
+    padding: 0.75rem;
+    border: 1px solid #ced4da;
+    transition: background-color .2s,color .2s,border-color .2s,box-shadow .2s;
+    -webkit-appearance: none;
+    appearance: none;
+    border-radius: 6px;
+  }
+}
+
+.btnLink {
+  color: #2884F9;
+  cursor: pointer;
+  text-decoration: underline;
+  font-size: 0.875rem;
+}
+
+.sectionTitle {
+  color: rgba(28, 31, 39, 0.5);
+}
+
+.ink_80 {
+  color: rgba(28, 31, 39, 0.7);
+}
+
+.instructor_about {
+  ul {
+    list-style: disc;
+    margin-left: 1rem;
+  }
+}
