@@ -30,7 +30,7 @@ export const MainLayout: FunctionComponent<MainLayoutProps> = ({
   let [isAuthenticated, setIsAuthenticated] = useState(false);
   
   useEffect(() => {
-    if (isInitializing) {
+    if (!isInitializing) {
       setIsAuthenticated(authenticated)
     }
   }, [isInitializing, authenticated]);

@@ -9,6 +9,7 @@ import emptyBox from '../assets/images/empty-box.svg'
 import { getAccountBg, getAccountAvatar } from '../apis/services/profile'
 import { CompanyInfo } from '../models/CompanyInfo'
 import RecentJobsComponent from './RecentJob'
+import PictureDialog from './PictureDialog'
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -23,7 +24,9 @@ const CorporatePublic = ({profile, accountId}) => {
   let [isBgImageLoading, setIsBgImageLoading] = useState(true)
   let [isAvatarImageLoading, setIsAvatarImageLoading] = useState(true)
 
+  let [isPictureDialogOpen, setIsPictureDialogOpen] = useState(false)
   let [shouldReloadOpenJobs, setShouldReloadOpenJobs] = useState(true)
+  let [shouldReloadAvatar, setShouldReloadAvatar] = useState(false)
 
   let [avatar, setAvatar] = useState<string | null>(null)
   let [bgImg, setBgImg] = useState<string | null>(null)
@@ -31,6 +34,17 @@ const CorporatePublic = ({profile, accountId}) => {
   let [companyImages, setCompanyImages] = useState<any[]>([]);
   let [companyAbout, setCompanyAbout] = useState<string | null>(null)
   let [jobs, setJobs] = useState<Array<any>>([]);
+
+  function openPictureDialog() {
+    setIsPictureDialogOpen(true)
+  }
+
+  function closePictureDialog(isUpdated?: boolean) {
+    setIsPictureDialogOpen(false)
+    if (isUpdated) {
+      setShouldReloadAvatar(!shouldReloadAvatar)
+    }
+  }
 
   const getOpenJobs = useCallback(async () => {
     try {
@@ -91,6 +105,10 @@ const CorporatePublic = ({profile, accountId}) => {
     }
   }
 
+  const onAvatarClick = () => (event) => {
+    openPictureDialog();
+  }
+
   useEffect(() => {
     if (profile) {
       setCompanyImages(profile.images);
@@ -132,7 +150,7 @@ const CorporatePublic = ({profile, accountId}) => {
                 <Skeleton animation="wave" variant='circular' width={128} height={128} className={classNames("mt-[-26px] z-50 lg:mt-[-22px] rounded-full cursor-pointer", styles.profilePicture)}></Skeleton>
               ) : (
                 <div className={classNames("mt-[-26px] z-50 lg:mt-[-22px] rounded-full", styles.profilePicture)}>
-                  {avatar && <Image loader={defaultImageLoader} src={avatar} width={128} height={128} alt='avatar' className='w-32 h-32 rounded-full ring-4 ring-white' />}
+                  {avatar && <Image onClick={onAvatarClick()} loader={defaultImageLoader} src={avatar} width={128} height={128} alt='avatar' className='w-32 h-32 rounded-full ring-4 ring-white cursor-pointer' />}
                   {!avatar && <div className='bg-[#2A85FF] flex items-center justify-center w-32 h-32 rounded-full ring-4 ring-white'><EmptyUserIcon></EmptyUserIcon></div>}
                 </div>
               )}
@@ -232,6 +250,7 @@ const CorporatePublic = ({profile, accountId}) => {
           <RecentJobsComponent></RecentJobsComponent>
         </div>
       </main>
+      <PictureDialog viewOnly={true} imgSrc={avatar} isOpen={isPictureDialogOpen} closeModal={() => {}} onCancelButtonClick={closePictureDialog} onSubmitted={closePictureDialog}></PictureDialog>
     </>
   )
 }

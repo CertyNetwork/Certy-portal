@@ -130,7 +130,7 @@ const AddSkillsDialog = ({
                       setSubmitting(true);
                       const finalSkills = [...userSkills, values.skill?.trim()].filter(sk => !!sk);
                       addSkills({skills: finalSkills}).then((e) => {
-                        console.log(e);
+                        // console.log(e);
                       }).finally(() => {
                         setSubmitting(false)
                         onSubmitted(true);

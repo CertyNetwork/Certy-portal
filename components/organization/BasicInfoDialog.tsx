@@ -162,10 +162,10 @@ const BasicInfoDialog = ({
                         errors.organizationType = 'Please specify your company type';
                       }
                       if (!values.workingHours) {
-                        errors.endDate = 'Please specify a working hour';
+                        errors.workingHours = 'Please specify a working hour';
                       }
                       if (!values.organizationSize) {
-                        errors.endDate = 'Please specify your organization\'s size';
+                        errors.organizationSize = 'Please specify your organization\'s size';
                       }
                       return errors;
                     }}

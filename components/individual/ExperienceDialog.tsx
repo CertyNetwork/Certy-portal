@@ -301,7 +301,7 @@ const AddExperienceDialog = ({
                         </div>
                         
                         <div className="mt-6 flex">
-                          <button type="button" onClick={onCancelButtonClick}
+                          <button type="button" onClick={() => onCancelButtonClick()}
                             className="inline-flex justify-center rounded-md border border-transparent bg-[#FCFCFC] px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2"
                           >
                             Cancel

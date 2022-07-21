@@ -1,8 +1,8 @@
 
-import { useCallback, useContext, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import dayjs from 'dayjs';
 import Image, { ImageLoaderProps } from 'next/image'
-import { IconButton, Skeleton, Divider, Chip } from '@mui/material'
+import { Skeleton, Divider, Chip } from '@mui/material'
 import { gql, useApolloClient } from '@apollo/client';
 import { getAccountBg, getAccountAvatar } from '../apis/services/profile'
 import profileBg from '../assets/images/profile-bg.png'
@@ -14,7 +14,6 @@ import { BasicInfo } from '../models/BasicInfo'
 import { Certificate } from '../models/Certificate'
 import PictureDialog from './PictureDialog'
 import RecentJobsComponent from './RecentJob';
-import BgPictureDialog from './BgPictureDialog'
 import styles from '../styles/Home.module.scss'
 
 function classNames(...classes) {
@@ -29,8 +28,6 @@ const IndividualPublic = ({profile, accountId}) => {
   const client = useApolloClient();
 
   let [isPictureDialogOpen, setIsPictureDialogOpen] = useState(false);
-  let [isBgPictureDialogOpen, setIsBgPictureDialogOpen] = useState(false)
-
   let [isBgImageLoading, setIsBgImageLoading] = useState(true)
   let [isAvatarImageLoading, setIsAvatarImageLoading] = useState(true)
 
@@ -60,23 +57,8 @@ const IndividualPublic = ({profile, accountId}) => {
     }
   }
 
-  function openBgPictureDialog() {
-    setIsBgPictureDialogOpen(true)
-  }
-
-  function closeBgPictureDialog(isUpdated?: boolean) {
-    setIsBgPictureDialogOpen(false)
-    if (isUpdated) {
-      setShouldReloadBg(!shouldReloadBg)
-    }
-  }
-
   const onAvatarClick = () => (event) => {
     openPictureDialog();
-  }
-
-  const onBgImageClick = (event) => {
-    openBgPictureDialog();
   }
 
   const getAvatar = useCallback(async () => {
@@ -175,8 +157,8 @@ const IndividualPublic = ({profile, accountId}) => {
               {isAvatarImageLoading ? (
                 <Skeleton animation="wave" variant='circular' width={128} height={128} className={classNames("mt-[-26px] z-50 lg:mt-[-22px] rounded-full cursor-pointer", styles.profilePicture)}></Skeleton>
               ) : (
-                <div onClick={onAvatarClick()} className={classNames("mt-[-26px] z-50 lg:mt-[-22px] rounded-full cursor-pointer", styles.profilePicture)}>
-                  {avatar && <Image loader={defaultImageLoader} src={avatar} width={128} height={128} alt='avatar' className='w-32 h-32 rounded-full ring-4 ring-white' />}
+                <div className={classNames("mt-[-26px] z-50 lg:mt-[-22px] rounded-full cursor-pointer", styles.profilePicture)}>
+                  {avatar && <Image onClick={onAvatarClick()} loader={defaultImageLoader} src={avatar} width={128} height={128} alt='avatar' className='w-32 h-32 rounded-full ring-4 ring-white' />}
                   {!avatar && <div className='bg-[#2A85FF] flex items-center justify-center w-32 h-32 rounded-full ring-4 ring-white'><EmptyUserIcon></EmptyUserIcon></div>}
                 </div>
               )}
@@ -299,8 +281,7 @@ const IndividualPublic = ({profile, accountId}) => {
           <RecentJobsComponent></RecentJobsComponent>
         </div>
       </main>
-      <PictureDialog imgSrc={avatar} isOpen={isPictureDialogOpen} closeModal={() => {}} onCancelButtonClick={closePictureDialog} onSubmitted={closePictureDialog}></PictureDialog>
-      <BgPictureDialog imgSrc={bgImg} isOpen={isBgPictureDialogOpen} closeModal={() => {}} onCancelButtonClick={closeBgPictureDialog} onSubmitted={closeBgPictureDialog}></BgPictureDialog>
+      <PictureDialog viewOnly={true} imgSrc={avatar} isOpen={isPictureDialogOpen} closeModal={() => {}} onCancelButtonClick={closePictureDialog} onSubmitted={closePictureDialog}></PictureDialog>
     </>
   )
 }

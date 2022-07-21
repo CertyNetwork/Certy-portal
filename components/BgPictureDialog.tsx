@@ -16,6 +16,7 @@ function classNames(...classes) {
 interface BgPictureDialogProps {
   imgSrc: string | null,
   isOpen: boolean,
+  viewOnly?: boolean,
   closeModal: () => void,
   onCancelButtonClick: () => void,
   onSubmitted: (updated?: boolean) => void
@@ -23,6 +24,7 @@ interface BgPictureDialogProps {
 
 const BgPictureDialog = ({
   imgSrc,
+  viewOnly,
   isOpen,
   closeModal,
   onCancelButtonClick,
@@ -165,7 +167,7 @@ const BgPictureDialog = ({
                     Cancel
                   </button>
                   <span className='ml-auto'></span>
-                  {imgSrc && <LoadingButton autoCapitalize="off" className="!capitalize !bg-[#f24921] !hover:bg-[#f24921]/80" type="submit" onClick={handleDeleteButtonClick} variant="contained" loading={isSubmitting}>
+                  {(!viewOnly && imgSrc) && <LoadingButton autoCapitalize="off" className="!capitalize !bg-[#f24921] !hover:bg-[#f24921]/80" type="submit" onClick={handleDeleteButtonClick} variant="contained" loading={isSubmitting}>
                     Delete
                   </LoadingButton>}
                   {!!files.length && <LoadingButton autoCapitalize="off" className="!capitalize bg-[#2A85FF]" type="submit" onClick={handleUploadButtonClick} variant="contained" disabled={!files.length} loading={isSubmitting}>

@@ -1,6 +1,10 @@
+import { BehaviorSubject, Subject } from 'rxjs';
 import { httpClient } from '../httpClient';
 
 const api = process.env.API_BASE_URL;
+const avatarSub = new Subject<void>();
+
+export const $avatarSub = avatarSub.asObservable();
 
 export const getUserType = async () => {
   return await httpClient.get(`${api}/profile/type`);
@@ -21,11 +25,14 @@ export const getAvatar = async () => {
 };
 
 export const uploadAvatar = async (formData: FormData) => {
-  return await httpClient.post(`${api}/profile/me/avatar`, formData, {
+  const res =  await httpClient.post(`${api}/profile/me/avatar`, formData, {
     headers: {
       "Content-Type": "multipart/form-data",
     }
   });
+
+  avatarSub.next();
+  return res;
 };
 
 export const removeAvatar = async () => {

@@ -16,6 +16,7 @@ function classNames(...classes) {
 interface PictureDialogProps {
   imgSrc: string | null,
   isOpen: boolean,
+  viewOnly?: boolean,
   closeModal: () => void,
   onCancelButtonClick: () => void,
   onSubmitted: (updated?: boolean) => void
@@ -24,6 +25,7 @@ interface PictureDialogProps {
 const PictureDialog = ({
   imgSrc,
   isOpen,
+  viewOnly,
   closeModal,
   onCancelButtonClick,
   onSubmitted
@@ -145,7 +147,7 @@ const PictureDialog = ({
                 {!!imgSrc && <div className="mt-4 mx-auto w-[280px] h-[280px]">
                   <img src={imgSrc || ''} className="rounded-full w-full h-full"></img>
                 </div>}
-                {!imgSrc && <><div {...getRootProps({className: classNames('dropzone mt-4 w-full min-h-[150px]')})}>
+                {(!viewOnly && !imgSrc) && <><div {...getRootProps({className: classNames('dropzone mt-4 w-full min-h-[150px]')})}>
                   <input {...getInputProps()} />
                   <div className="text-center">
                     <p>Drag and drop file here, or click to select file</p>
@@ -164,7 +166,7 @@ const PictureDialog = ({
                     Cancel
                   </button>
                   <span className='ml-auto'></span>
-                  {imgSrc && <LoadingButton autoCapitalize="off" className="!capitalize !bg-[#f24921] !hover:bg-[#f24921]/80" type="submit" onClick={handleDeleteButtonClick} variant="contained" loading={isSubmitting}>
+                  {!viewOnly && imgSrc && <LoadingButton autoCapitalize="off" className="!capitalize !bg-[#f24921] !hover:bg-[#f24921]/80" type="submit" onClick={handleDeleteButtonClick} variant="contained" loading={isSubmitting}>
                     Delete
                   </LoadingButton>}
                   {!!files.length && <LoadingButton autoCapitalize="off" className="!capitalize bg-[#2A85FF]" type="submit" onClick={handleUploadButtonClick} variant="contained" disabled={!files.length} loading={isSubmitting}>

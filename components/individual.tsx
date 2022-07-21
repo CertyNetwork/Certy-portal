@@ -3,7 +3,7 @@ import { useCallback, useContext, useEffect, useState } from 'react'
 import dayjs from 'dayjs';
 import Image, { ImageLoaderProps } from 'next/image'
 import { IconButton, Skeleton, Divider, Chip } from '@mui/material'
-import { PencilIcon, PlusIcon, ExclamationIcon } from '@heroicons/react/outline'
+import { PencilIcon, PlusIcon, ExclamationIcon, BadgeCheckIcon } from '@heroicons/react/outline'
 import { gql, useApolloClient } from '@apollo/client';
 import { getAvatar, getBgImage, getProfile, changeUserType } from '../apis/services/profile'
 import { getKycStatus } from "../apis/services/kyc";
@@ -20,7 +20,7 @@ import AddEducationDialog from './individual/EducationDialog'
 import AddSkillsDialog from './individual/SKillsDialog'
 import BasicInfoDialog from './individual/BasicInfoDialog'
 import MyCertificatesDialog from './individual/MyCertificatesDialog';
-import KycDialog from './individual/KycDialog';
+import KycDialogV2 from './individual/KycDialogV2';
 import AddAboutMeDialog from './individual/AboutMeDialog'
 import PictureDialog from './PictureDialog'
 import RecentJobsComponent from './RecentJob';
@@ -317,8 +317,8 @@ const Individual = () => {
                 <>
                   {!bgImg && <Image src={profileBg} alt='bg-picture' className='w-full h-40 lg:h-60 object-cover rounded-t-lg'/>}
                   {!!bgImg && <Image loader={defaultImageLoader} src={bgImg} alt='bg-picture' width={900} height={300} className='w-full h-40 lg:h-60 object-cover rounded-t-lg' />}
-                  <span onClick={onBgImageClick} className="absolute cursor-pointer right-5 top-5 flex items-center justify-center w-7 h-7 rounded-full bg-slate-50">
-                    <PencilIcon className="w-3 h-3"></PencilIcon>
+                  <span onClick={onBgImageClick} className="absolute cursor-pointer right-5 top-5 flex items-center justify-center w-8 h-8 rounded-full bg-slate-50">
+                    <PencilIcon width={16} height={16}></PencilIcon>
                   </span>
                 </>
               )}
@@ -333,12 +333,12 @@ const Individual = () => {
                 </div>
               )}
               <div className="flex flex-col items-center lg:items-start mt-4 pt-4 lg:mt-0 lg:ml-8">
-                <div className="font-bold leading-none flex flex-row space-x-3">
+                <div className="font-bold leading-none flex flex-row items-center space-x-3">
                   {info && <span>{info?.displayName}</span>}
-                  {(kycStatus && kycStatus.kycStatus !== 'verified' && kycStatus.kycStatus !== 'completed') && <span className='cursor-pointer text-[#FF6A1C] text-sm flex space-x-1 items-center' onClick={openKycDialog}>
-                    <ExclamationIcon width={16} height={16}></ExclamationIcon>
+                  {!kycStatus || (kycStatus.kycStatus !== 'verified' && kycStatus.kycStatus !== 'completed') ? <span className='cursor-pointer text-[#FF6A1C] text-sm flex space-x-1 items-center' onClick={openKycDialog}>
+                    <ExclamationIcon width={24} height={24}></ExclamationIcon>
                     <span>Complete KYC</span>
-                  </span>}
+                  </span> : <BadgeCheckIcon color='#2A85FF' width={32} height={32}></BadgeCheckIcon>}
                 </div>
                 <div className="text-secondary text-sm mt-3 text-[rgb(28,31,39)]/70">{info?.bio}</div>
                 {(kycStatus && kycStatus.kycStatus !== 'verified' && kycStatus.kycStatus !== 'completed') && <div className='flex flex-col items-center lg:items-start mt-4'>
@@ -510,7 +510,7 @@ const Individual = () => {
       <AddEducationDialog ed={selectedEd} isOpen={isEducationDialogOpen} closeModal={() => {}} onCancelButtonClick={closeEducationModal} onSubmitted={closeEducationModal}></AddEducationDialog>
       <AddSkillsDialog skills={skills} isOpen={isSkillsDialogOpen} closeModal={() => {}} onCancelButtonClick={closeSkillsModal} onSubmitted={closeSkillsModal}></AddSkillsDialog>
       <MyCertificatesDialog selectedCertIds={selectedCertificates || []} certificates={certificates} isOpen={isMyCertificateDialogOpen} closeModal={() => {}} onCancelButtonClick={closeMyCertificateModal} onSubmitted={closeMyCertificateModal}></MyCertificatesDialog>
-      <KycDialog session={kycStatus?.session} isOpen={isKycDialogOpen} closeModal={() => {}} onCancelButtonClick={closeKycDialog} onSubmitted={closeKycDialog}></KycDialog>
+      <KycDialogV2 session={kycStatus?.session} isOpen={isKycDialogOpen} closeModal={() => {}} onCancelButtonClick={closeKycDialog} onSubmitted={closeKycDialog}></KycDialogV2>
     </>
   )
 }

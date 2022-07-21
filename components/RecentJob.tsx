@@ -36,7 +36,7 @@ const RecentJobsComponent = ({
       <ul className="mt-7 flex flex-col space-y-6">
         {(!loading && data && data.jobs) && data.jobs.map((job) => (
           <li key={job.id} className="cursor-pointer inline-flex flex-row items-start rounded-l-lg rounded-r-lg" onClick={openJob(job.id)}>
-            <ProfileImage src={job.owner_id} alt={'job_' + job.id} />
+            <div className="min-w-[48px]"><ProfileImage src={job.owner_id} alt={'job_' + job.id} /></div>
             <div className="flex flex-col ml-6">
               <div className="font-semibold text-sm line-clamp-1 text-[rgb(28,31,39)]">{job.title}</div>
               <div className="mt-2 flex flex-row space-x-3 divide-x divide-[rgb(0,0,0)]/5">

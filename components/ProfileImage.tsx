@@ -1,12 +1,8 @@
-import NextImage, { ImageLoaderProps } from 'next/image'
 import { useEffect, useState } from 'react'
 import { Skeleton } from '@mui/material'
 import { UserCircleIcon } from '@heroicons/react/outline'
-import { getAccountAvatar } from '../apis/services/profile'
+import { getAccountAvatar, $avatarSub } from '../apis/services/profile'
 
-const avatarImageLoader =  ({ src, width, quality }: ImageLoaderProps) => {
-  return src;
-}
 
 const ProfileImage = (props) => {
   const [loading, setLoading] = useState(true);
@@ -37,6 +33,12 @@ const ProfileImage = (props) => {
 
   useEffect(() => {
     getProfileImage(props.src);
+    const sub = $avatarSub.subscribe(() => {
+      getProfileImage(props.src);
+    });
+    return () => {
+      sub.unsubscribe();
+    }
   }, [props.src]);
 
   const getProfileImage = async (accountId: string) => {
@@ -56,7 +58,7 @@ const ProfileImage = (props) => {
   }
 
   return (loading ? <Skeleton variant="circular" width={48} height={48} />
-    : (!loading && imgSrc ? <img {...props} src={imgSrc} className="w-12 h-12 rounded-full object-cover" /> : <UserCircleIcon strokeWidth={1} className='w-12 h-12 font-light' />));
+    : (!loading && imgSrc ? <img {...props} src={imgSrc} className="w-12 h-12 rounded-full object-cover" /> : <UserCircleIcon width={48} height={48} strokeWidth={1}/>));
 };
 
 const isMobileConnection = () => {
