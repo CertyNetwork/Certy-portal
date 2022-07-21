@@ -150,16 +150,13 @@ const BasicInfoDialog = ({
                     validate={values => {
                       const errors: any = {};
                       if (!values.companyName) {
-                        errors.school = 'Company name is required';
+                        errors.companyName = 'Company name is required';
                       }
                       if (!values.email) {
-                        errors.degree = 'Email is required';
+                        errors.email = 'Email is required';
                       }
                       if (!values.location) {
-                        errors.fieldOfStudy = 'Location is required';
-                      }
-                      if (!values.email) {
-                        errors.startDate = 'Please specify an email';
+                        errors.location = 'Location is required';
                       }
                       if (!values.organizationType) {
                         errors.organizationType = 'Please specify your company type';
@@ -173,6 +170,7 @@ const BasicInfoDialog = ({
                       return errors;
                     }}
                     onSubmit={(values, { setSubmitting }) => {
+                      setSubmitting(true)
                       let success = false;
                       updateOrganizationBasicInfo(values).then((e) => {
                         success = true;
@@ -247,7 +245,6 @@ const BasicInfoDialog = ({
                           <BootstrapSelect
                             id="organizationType"
                             name="organizationType"
-                            defaultValue={'product'}
                             value={values.organizationType}
                             inputProps={{ 'aria-label': 'Without label' }}
                             onChange={handleChange}

@@ -1,7 +1,6 @@
 import Cookies from 'js-cookie';
 import axios, { AxiosRequestConfig } from 'axios';
 import HttpStatusCodes from './HttpStatusCodes';
-import { authenticationService } from './services/auth';
 
 const apiConfig = {
   apiUrl: process.env.API_BASE_URL
@@ -59,12 +58,6 @@ httpClient.interceptors.request.use(
       config.headers['Authorization'] = `Bearer ${accessToken}`;
     }
 
-    if (config.data instanceof FormData) {
-      config.headers = {
-        ...config.headers,
-        'Content-Type': 'multipart/form-data',
-      };
-    }
     return config;
   },
   (error) => {
@@ -80,6 +73,7 @@ httpClient.interceptors.response.use(
     if (!error) {
       return;
     }
+
     const httpStatus = error?.response?.status;
     const rawErrors = error?.response?.data;
     const errors = 'message' in (rawErrors || {}) ? rawErrors.message : rawErrors;

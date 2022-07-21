@@ -1,23 +1,14 @@
 
-import { useCallback, useEffect, useState, useContext } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import Image, { ImageLoaderProps } from 'next/image'
 import { gql, useApolloClient } from '@apollo/client'
-import { IconButton, Skeleton, Divider } from '@mui/material'
-import { PencilIcon, PlusIcon, XIcon, ExclamationIcon } from '@heroicons/react/outline'
+import { Skeleton, Divider } from '@mui/material'
 import styles from '../styles/Home.module.scss'
 import profileBg from '../assets/images/profile-bg.png'
 import emptyBox from '../assets/images/empty-box.svg'
-import { getAvatar, changeUserType, getBgImage, getProfile, removeOrganizationImages } from '../apis/services/profile'
-import { getKycStatus } from '../apis/services/kyc'
+import { getAccountBg, getAccountAvatar } from '../apis/services/profile'
 import { CompanyInfo } from '../models/CompanyInfo'
-import BasicInfoDialog from './organization/BasicInfoDialog'
-import AddAboutMeDialog from './organization/AboutMeDialog'
 import RecentJobsComponent from './RecentJob'
-import PictureDialog from './PictureDialog'
-import CompanyImagesDialog from './organization/CompanyImagesDialog'
-import { AuthContext } from '../contexts/auth-context'
-import BgPictureDialog from './BgPictureDialog'
-import KycDialog from './organization/KycDialog'
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -27,19 +18,12 @@ const defaultImageLoader =  ({ src, width, quality }: ImageLoaderProps) => {
   return src;
 }
 
-const Corporate = () => {
+const CorporatePublic = ({profile, accountId}) => {
   const client = useApolloClient();
-  const { getAccountId } = useContext(AuthContext);
-
-  let [isLoading, setIsLoading] = useState(true);
   let [isBgImageLoading, setIsBgImageLoading] = useState(true)
   let [isAvatarImageLoading, setIsAvatarImageLoading] = useState(true)
 
-  let [shouldReloadInfo, setShouldReloadInfo] = useState(true);
   let [shouldReloadOpenJobs, setShouldReloadOpenJobs] = useState(true)
-  let [shouldReloadAvatar, setShouldReloadAvatar] = useState(false)
-  let [shouldReloadBg, setShouldReloadBg] = useState(false)
-  let [shouldReloadKycState, setShouldReloadKycState] = useState(false)
 
   let [avatar, setAvatar] = useState<string | null>(null)
   let [bgImg, setBgImg] = useState<string | null>(null)
@@ -47,91 +31,6 @@ const Corporate = () => {
   let [companyImages, setCompanyImages] = useState<any[]>([]);
   let [companyAbout, setCompanyAbout] = useState<string | null>(null)
   let [jobs, setJobs] = useState<Array<any>>([]);
-  let [kycStatus, setKycStatus] = useState<any>(null);
-
-  let [isBasicInfoDialogOpen, setIsBasicInfoDialogOpen] = useState(false)
-  let [isAboutDialogOpen, setIsAboutDialogOpen] = useState(false)
-  let [isPictureDialogOpen, setIsPictureDialogOpen] = useState(false)
-  let [isBgPictureDialogOpen, setIsBgPictureDialogOpen] = useState(false)
-  let [isAddImageDialogOpen, setIsAddImageDialogOpen] = useState(false)
-  let [isKycDialogOpen, setIsKycDialogOpen] = useState(false)
-
-  function openBasicInfoModal() {
-    setIsBasicInfoDialogOpen(true)
-  }
-
-  function closeBasicInfoModal(isUpdated?: boolean) {
-    setIsBasicInfoDialogOpen(false)
-    if (isUpdated) {
-      setShouldReloadInfo(!shouldReloadInfo)
-    }
-  }
-
-  function openAboutModal() {
-    setIsAboutDialogOpen(true)
-  }
-
-  function closeAboutModal(isUpdated?: boolean) {
-    setIsAboutDialogOpen(false)
-    if (isUpdated) {
-      setShouldReloadInfo(!shouldReloadInfo)
-    }
-  }
-
-  function openPictureDialog() {
-    setIsPictureDialogOpen(true)
-  }
-
-  function closePictureDialog(isUpdated?: boolean) {
-    setIsPictureDialogOpen(false)
-    if (isUpdated) {
-      setShouldReloadAvatar(!shouldReloadAvatar)
-    }
-  }
-
-  function openBgPictureDialog() {
-    setIsBgPictureDialogOpen(true)
-  }
-
-  function closeBgPictureDialog(isUpdated?: boolean) {
-    setIsBgPictureDialogOpen(false)
-    if (isUpdated) {
-      setShouldReloadBg(!shouldReloadBg)
-    }
-  }
-
-  const getCompanyProfile = useCallback(async () => {
-    try {
-      const { data } = await getProfile();
-      setCompanyImages(data.data.images);
-      setCompanyInfo(data.data.info);
-      setCompanyAbout(data.data.about);
-    } catch (error) {
-      console.log('error:', error);
-    }
-  }, []);
-
-  function openCompanyImagesModal() {
-    setIsAddImageDialogOpen(true)
-  }
-
-  function closeCompanyImagesModal(isUpdated?: boolean) {
-    setIsAddImageDialogOpen(false)
-    if (isUpdated) {
-      setShouldReloadInfo(!shouldReloadInfo)
-    }
-  }
-
-  const closeKycDialog = (isUpdated?: boolean) => {
-    setIsKycDialogOpen(false)
-    if (isUpdated) {
-      setShouldReloadKycState(!shouldReloadKycState)
-    }
-  }
-
-  const openKycDialog = () => {
-    setIsKycDialogOpen(true)
-  }
 
   const getOpenJobs = useCallback(async () => {
     try {
@@ -152,7 +51,7 @@ const Corporate = () => {
           }
         }`,
         variables: {
-          ownerId: getAccountId(),
+          ownerId: accountId,
         },
       });
       if (result && result.data) {
@@ -161,56 +60,44 @@ const Corporate = () => {
     } catch (error) {
       console.log('error:', error);
     }
-  }, [client, getAccountId]);
+  }, [client, accountId]);
 
-  const onAvatarClick = (event) => {
-    openPictureDialog();
-  }
-
-  const onBgImageClick = (event) => {
-    openBgPictureDialog();
-  }
-
+  
   const getMyAvatar = useCallback(async () => {
     try {
-      const { data } = await getAvatar();
+      const { data } = await getAccountAvatar(accountId);
       setAvatar(data.data.src);
     } catch (error) {
       console.log('error:', error);
     } finally {
       setTimeout(() => setIsAvatarImageLoading(false), 300)
     }
-  }, []);
+  }, [accountId]);
 
   const getMyBgImg = useCallback(async () => {
     try {
-      const { data } = await getBgImage();
+      const { data } = await getAccountBg(accountId);
       setBgImg(data.data.src);
     } catch (error) {
       console.log('error:', error);
     } finally {
       setTimeout(() => setIsBgImageLoading(false), 300)
     }
-  }, []);
-
-  const getKycState = useCallback(async () => {
-    try {
-      const { data } = await getKycStatus();
-      setKycStatus(data.data);
-    } catch (error) {
-      console.log('error:', error);
-    }
-  }, []);
+  }, [accountId]);
 
   const openJob = (jobId: string) => (event) => {
     if (window) {
       window.open(`https://certy-career-builder.vercel.app/certy-career/individual/jobs/${jobId}`, '_blank')?.focus();
     }
   }
-  
+
   useEffect(() => {
-    getCompanyProfile();
-  }, [getCompanyProfile, shouldReloadInfo]);
+    if (profile) {
+      setCompanyImages(profile.images);
+      setCompanyInfo(profile.info);
+      setCompanyAbout(profile.about);
+    }
+  }, [profile]);
 
   useEffect(() => {
     getOpenJobs()
@@ -218,27 +105,11 @@ const Corporate = () => {
 
   useEffect(() => {
     getMyAvatar()
-  }, [getMyAvatar, shouldReloadAvatar]);
+  }, [getMyAvatar]);
 
   useEffect(() => {
     getMyBgImg()
-  }, [getMyBgImg, shouldReloadBg]);
-
-  useEffect(() => {
-    getKycState()
-  }, [getKycState, shouldReloadKycState]);
-
-  const removeCompanyImage = (docId) => (event) => {
-    removeOrganizationImages(docId).then(() => {
-      setShouldReloadInfo(!shouldReloadInfo)
-    })
-  }
-
-  const handleChangeUserType = () => {
-    changeUserType('individual').then(() => {
-      window.location.reload();
-    });
-  }
+  }, [getMyBgImg]);
   
   return (
     <>
@@ -252,9 +123,6 @@ const Corporate = () => {
                 <>
                   {!bgImg && <Image src={profileBg} alt='bg-picture' className='w-full h-40 lg:h-60 object-cover rounded-t-lg' />}
                   {!!bgImg && <Image loader={defaultImageLoader} src={bgImg} alt='bg-picture' width={900} height={300} className='w-full h-40 lg:h-60 object-cover rounded-t-lg' />}
-                  <span onClick={onBgImageClick} className="absolute cursor-pointer right-5 top-5 flex items-center justify-center w-7 h-7 rounded-full bg-slate-50">
-                    <PencilIcon className="w-3 h-3"></PencilIcon>
-                  </span>
                 </>
               )}
             </div>
@@ -263,7 +131,7 @@ const Corporate = () => {
               {isAvatarImageLoading ? (
                 <Skeleton animation="wave" variant='circular' width={128} height={128} className={classNames("mt-[-26px] z-50 lg:mt-[-22px] rounded-full cursor-pointer", styles.profilePicture)}></Skeleton>
               ) : (
-                <div onClick={onAvatarClick} className={classNames("mt-[-26px] z-50 lg:mt-[-22px] rounded-full cursor-pointer", styles.profilePicture)}>
+                <div className={classNames("mt-[-26px] z-50 lg:mt-[-22px] rounded-full", styles.profilePicture)}>
                   {avatar && <Image loader={defaultImageLoader} src={avatar} width={128} height={128} alt='avatar' className='w-32 h-32 rounded-full ring-4 ring-white' />}
                   {!avatar && <div className='bg-[#2A85FF] flex items-center justify-center w-32 h-32 rounded-full ring-4 ring-white'><EmptyUserIcon></EmptyUserIcon></div>}
                 </div>
@@ -271,21 +139,8 @@ const Corporate = () => {
               <div className="pt-4 flex flex-col items-center lg:items-start mt-4 lg:mt-0 lg:ml-8">
                 <div className="text-lg font-bold leading-none flex space-x-4">
                   <span>{companyInfo?.companyName}</span>
-                  {(kycStatus && kycStatus.kycStatus !== 'verified' && kycStatus.kycStatus !== 'completed') && <span className='cursor-pointer text-[#FF6A1C] text-sm flex space-x-1 items-center' onClick={openKycDialog}>
-                    <ExclamationIcon width={16} height={16}></ExclamationIcon>
-                    <span>Complete KYC</span>
-                  </span>}
                 </div>
                 <div className="text-secondary mt-3">{companyInfo?.location}</div>
-                {(kycStatus && kycStatus.kycStatus !== 'verified' && kycStatus.kycStatus !== 'completed') && <div className='mt-4 flex flex-col items-center lg:items-start'>
-                  <span className='text-[14px] text-[rgb(28,31,39)]/70'>Not Organization?</span>
-                  <span onClick={handleChangeUserType} className={classNames(styles.btnLink)}>Click here to switch to Individual Mode</span>
-                </div>}
-              </div>
-              <div className='ml-auto'>
-                <IconButton aria-label="edit" color="primary" onClick={openBasicInfoModal}>
-                  <PencilIcon color='#2A85FF' className="h-5 w-5"></PencilIcon>
-                </IconButton>
               </div>
             </div>
 
@@ -295,81 +150,48 @@ const Corporate = () => {
 
             <div className="py-5 h-full px-4 lg:px-16">
               <p className={classNames("font-semibold", styles.sectionTitle)}>About</p>
-              {!!companyAbout ? (
-                <>
-                  <div className={classNames("leading-7 mt-6 text-sm text-[#1C1F27]", styles.instructor_about)} dangerouslySetInnerHTML={{__html: companyAbout || ''}}></div>
-                  <div className="mt-6">
-                    <a onClick={openAboutModal} className={classNames("app-link", styles.btnLink)}>Edit About</a>
-                  </div>
-                </>
-              ) : (
-                <div className='py-3 w-full flex flex-col items-center justify-center'>
-                  <Image src={emptyBox} alt='empty' className='w-32 h-32' />
-                  <a onClick={openAboutModal} className={classNames('mt-3 text-sm', styles.btnLink)}>Add About Me</a>
-                </div>
-              )}
+              <div className={classNames("leading-7 mt-6 text-sm text-[#1C1F27]", styles.instructor_about)} dangerouslySetInnerHTML={{__html: companyAbout || ''}}></div>
             </div>
           </div>
           <div className='w-full app-card px-0 mt-5'>
             <div className="py-5 h-full px-4 lg:px-16">
               <div className='flex flex-row justify-between items-center'>
                 <p className={classNames("font-semibold", styles.sectionTitle)}>Images</p>
-                {!!companyImages.length && <div className='flex flex-row space-x-3'>
-                  <IconButton aria-label="add" color="primary" onClick={openCompanyImagesModal}>
-                    <PlusIcon color='#2A85FF' className="h-5 w-5"></PlusIcon>
-                  </IconButton>
-                </div>}
               </div>
-              {!!companyImages.length && <div className='-mx-4 mt-4 flex flex-row flex-wrap'>
+              <div className='-mx-4 mt-4 flex flex-row flex-wrap'>
                 {companyImages.map((doc) => (
                    <div key={doc.id} className='w-[140px] h-[140px] p-4 rounded-[12px] flex items-center justify-center relative'>
                     <Image loader={defaultImageLoader} src={doc.src} width={112} height={112} alt='company-picture' className='rounded-[12px] object-cover' />
-                    <span onClick={removeCompanyImage(doc.id)} className="absolute cursor-pointer right-5 top-5 flex items-center justify-center w-7 h-7 rounded-full bg-slate-50">
-                      <XIcon className="w-3 h-3"></XIcon>
-                    </span>
                   </div>
                 ))}
-              </div>}
-              {!companyImages.length && <div className='py-3 w-full flex flex-col items-center justify-center'>
-                <Image src={emptyBox} alt='empty' className='w-32 h-32' />
-                <a onClick={openCompanyImagesModal} className={classNames('mt-3 text-sm', styles.btnLink)}>Add Image</a>
-              </div>}
+              </div>
             </div>
           </div>
           <div className='w-full app-card px-0 mt-5'>
             <div className="py-5 h-full px-4 lg:px-16">
               <div className='flex flex-row justify-between items-center'>
                 <p className={classNames("font-semibold", styles.sectionTitle)}>Organization Information</p>
-                {companyInfo && <div className='flex flex-row space-x-3'>
-                  <IconButton aria-label="edit" color="primary" onClick={openBasicInfoModal}>
-                    <PencilIcon color='#2A85FF' className="h-5 w-5"></PencilIcon>
-                  </IconButton>
-                </div>}
               </div>
-              {companyInfo && <div className='mt-6'>
+              <div className='mt-6'>
                 <div className={classNames("w-full flex flex-row items-start flex-wrap")}>
                   <div className='p-3 flex flex-col w-full md:w-1/3'>
                     <span className='font-light text-sm text-[rgb(28,31,39)]/50'>Location</span>
-                    <span className='mt-2'>{companyInfo.location}</span>
+                    <span className='mt-2'>{companyInfo?.location}</span>
                   </div>
                   <div className='p-3 flex flex-col w-full md:w-1/3'>
                     <span className='font-light text-sm text-[rgb(28,31,39)]/50'>Company Type</span>
-                    <span className='mt-2 capitalize'>{companyInfo.organizationType || 'Flexible'}</span>
+                    <span className='mt-2 capitalize'>{companyInfo?.organizationType}</span>
                   </div>
                   <div className='p-3 flex flex-col w-full md:w-1/3'>
                     <span className='font-light text-sm text-[rgb(28,31,39)]/50'>Working Hours</span>
-                    <span className='mt-2'>{companyInfo.workingHours}</span>
+                    <span className='mt-2'>{companyInfo?.workingHours}</span>
                   </div>
                   <div className='p-3 flex flex-col w-full md:w-1/3'>
                     <span className='font-light text-sm text-[rgb(28,31,39)]/50'>Size</span>
-                    <span className='mt-2'>{companyInfo.organizationSize}</span>
+                    <span className='mt-2'>{companyInfo?.organizationSize}</span>
                   </div>
                 </div>
-              </div>}
-              {!companyInfo && <div className='py-3 w-full flex flex-col items-center justify-center'>
-                <Image src={emptyBox} alt='empty' className='w-32 h-32' />
-                <a onClick={openBasicInfoModal} className={classNames('mt-3 text-sm', styles.btnLink)}>Add Organization Information</a>
-              </div>}
+              </div>
             </div>
           </div>
 
@@ -379,7 +201,6 @@ const Corporate = () => {
               {!jobs.length && <div className='py-3 w-full flex flex-col items-center justify-center'>
                 <div className='py-3 w-full flex flex-col items-center justify-center'>
                   <Image src={emptyBox} alt='empty' className='w-32 h-32' />
-                  <a href='https://certy-career-builder.vercel.app/certy-career/individual/jobs' target={'_blank'} className={classNames('mt-3 text-sm', styles.btnLink)} rel="noreferrer">Post a Job</a>
                 </div>
               </div>}
               {jobs.length > 0 &&
@@ -411,17 +232,11 @@ const Corporate = () => {
           <RecentJobsComponent></RecentJobsComponent>
         </div>
       </main>
-      <PictureDialog imgSrc={avatar} isOpen={isPictureDialogOpen} closeModal={() => {}} onCancelButtonClick={closePictureDialog} onSubmitted={closePictureDialog}></PictureDialog>
-      <BgPictureDialog imgSrc={bgImg} isOpen={isBgPictureDialogOpen} closeModal={() => {}} onCancelButtonClick={closeBgPictureDialog} onSubmitted={closeBgPictureDialog}></BgPictureDialog>
-      <BasicInfoDialog info={companyInfo} isOpen={isBasicInfoDialogOpen} closeModal={() => {}} onCancelButtonClick={closeBasicInfoModal} onSubmitted={closeBasicInfoModal}></BasicInfoDialog>
-      <AddAboutMeDialog about={companyAbout} isOpen={isAboutDialogOpen} closeModal={() => {}} onCancelButtonClick={closeAboutModal} onSubmitted={closeAboutModal}></AddAboutMeDialog>
-      <CompanyImagesDialog numberOfImages={companyImages.length} isOpen={isAddImageDialogOpen} closeModal={() => {}} onCancelButtonClick={closeCompanyImagesModal} onSubmitted={closeCompanyImagesModal}></CompanyImagesDialog>
-      <KycDialog isOpen={isKycDialogOpen} onCancelButtonClick={closeKycDialog} onSubmitted={closeKycDialog} closeModal={() => {}}></KycDialog>
     </>
   )
 }
 
-export default Corporate;
+export default CorporatePublic;
 
 function EmptyUserIcon() {
   return (

@@ -2,18 +2,18 @@
 import { useContext, useEffect, useState } from 'react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
+import Router from 'next/router'
 import { CircularProgress } from '@mui/material'
 import { MainLayout } from '../layouts/main'
 import { getUserType } from '../apis/services/profile'
 import Individual from '../components/individual'
 import Corporate from '../components/corporate'
 import { AuthContext } from '../contexts/auth-context'
-import Router from 'next/router'
 
 const Home: NextPage = () => {
   let [userType, setUserType] = useState(null)
   let [isLoading, setIsLoading] = useState(false)
-  const { isInitializing, connected, authenticated } = useContext(AuthContext)
+  const { isInitializing, authenticated } = useContext(AuthContext)
 
   const getMyUserType = async () => {
     try {

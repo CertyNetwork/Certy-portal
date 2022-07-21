@@ -21,7 +21,11 @@ export const getAvatar = async () => {
 };
 
 export const uploadAvatar = async (formData: FormData) => {
-  return await httpClient.post(`${api}/profile/me/avatar`, formData);
+  return await httpClient.post(`${api}/profile/me/avatar`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    }
+  });
 };
 
 export const removeAvatar = async () => {
@@ -33,7 +37,11 @@ export const getBgImage = async () => {
 };
 
 export const uploadBgImage = async (formData: FormData) => {
-  return await httpClient.post(`${api}/profile/me/bg-image`, formData);
+  return await httpClient.post(`${api}/profile/me/bg-image`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    }
+  });
 };
 
 export const removeBgImage = async () => {
@@ -42,6 +50,10 @@ export const removeBgImage = async () => {
 
 export const getAccountAvatar = async (accountId: string) => {
   return await httpClient.get(`${api}/profile/avatar/${accountId}`);
+};
+
+export const getAccountBg = async (accountId: string) => {
+  return await httpClient.get(`${api}/profile/bg/${accountId}`);
 };
 
 export const updateIndividualBasicInfo = async (info) => {
@@ -54,7 +66,10 @@ export const updateOrganizationBasicInfo = async (info) => {
 
 export const uploadOrganizationImages =async (formData: any, onUploadProgress?: (progressEvent: any) => void) => {
   return await httpClient.post(`${api}/profile/me/organization-images`, formData, {
-    onUploadProgress
+    onUploadProgress,
+    headers: {
+      "Content-Type": "multipart/form-data",
+    }
   });
 }
 
@@ -80,4 +95,13 @@ export const addCertificates = async (payload) => {
 
 export const addAbout = async (payload) => {
   return await httpClient.post(`${api}/profile/me/about`, payload, {});
+};
+
+export const getPublicProfile = async (accountId: string) => {
+  try {
+    const res = await httpClient.get(`${api}/profile/public/${accountId}`);
+    return res.data;
+  } catch(e) {
+    console.log(e);
+  }
 };

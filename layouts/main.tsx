@@ -1,19 +1,19 @@
-import React, { FunctionComponent, useContext } from 'react';
+import React, { FunctionComponent, useContext, useEffect, useState } from 'react';
 import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { MenuIcon, XIcon } from '@heroicons/react/outline'
+import { Button } from '@mui/material'
 import Image from 'next/image'
+import Link from 'next/link';
 import logo from '../assets/images/logo.png'
 import OurSolution from '../components/OurSolution';
 import { AuthContext } from '../contexts/auth-context'
 import ProfileImage from '../components/ProfileImage'
 import githubIcon from '../assets/images/socials/github_blue.svg'
 import mediumIcon from '../assets/images/socials/medium_blue.svg'
-import mailIcon from '../assets/images/socials/email_blue.svg'
 import telegramIcon from '../assets/images/socials/telegram_blue.svg'
 import twitterIcon from '../assets/images/socials/twitter_blue.svg'
 import discordIcon from '../assets/images/socials/discord_blue.svg'
-import Link from 'next/link';
 
 interface MainLayoutProps {
   children: any
@@ -26,8 +26,14 @@ function classNames(...classes) {
 export const MainLayout: FunctionComponent<MainLayoutProps> = ({
   children,
 }) => {
-
-  const { logout, getAccountId } = useContext(AuthContext)
+  const { login, logout, getAccountId, authenticated, isInitializing } = useContext(AuthContext)
+  let [isAuthenticated, setIsAuthenticated] = useState(false);
+  
+  useEffect(() => {
+    if (isInitializing) {
+      setIsAuthenticated(authenticated)
+    }
+  }, [isInitializing, authenticated]);
   
   return (
     <>
@@ -52,7 +58,7 @@ export const MainLayout: FunctionComponent<MainLayoutProps> = ({
                     <div className="ml-4 flex items-center md:ml-6">
                       <OurSolution></OurSolution>
                       {/* Profile dropdown */}
-                      <Menu as="div" className="ml-3 relative">
+                      {isAuthenticated ? <Menu as="div" className="ml-3 relative">
                         <div>
                           <Menu.Button className="max-w-xs bg-[rgb(42,133,255)]/5 rounded-full flex items-center text-sm focus:outline-none">
                             <span className="sr-only">Open user menu</span>
@@ -84,7 +90,7 @@ export const MainLayout: FunctionComponent<MainLayoutProps> = ({
                             </Menu.Item>
                           </Menu.Items>
                         </Transition>
-                      </Menu>
+                      </Menu> : <Button variant="outlined" className='ml-3 !capitalize' onClick={login}>Login with NEAR</Button>}
                     </div>
                   </div>
                   <div className="-mr-2 flex md:hidden">
@@ -105,7 +111,7 @@ export const MainLayout: FunctionComponent<MainLayoutProps> = ({
                 <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 text-center">
                   <OurSolution></OurSolution>
                 </div>
-                <div className="flex items-center justify-center flex-col pt-4 pb-3 border-t border-gray-700">
+                {isAuthenticated ? <div className="flex items-center justify-center flex-col pt-4 pb-3 border-t border-gray-700">
                   <div className="flex items-center px-5">
                     <div className="flex-shrink-0">
                       <ProfileImage width={32} height={32} src={getAccountId()} className="rounded-full"></ProfileImage>
@@ -120,13 +126,13 @@ export const MainLayout: FunctionComponent<MainLayoutProps> = ({
                       Sign out
                     </Disclosure.Button>
                   </div>
-                </div>
+                </div> : <div className="flex items-center justify-center flex-col pt-4 pb-3"><Button variant="outlined" className='ml-3 !capitalize' onClick={login}>Login with NEAR</Button></div>}
               </Disclosure.Panel>
             </>
           )}
         </Disclosure>
         {children}
-        <footer className="footer my-8">
+        <footer className="footer mt-8 py-[48px] bg-[#FFFFFF]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-row justify-between items-center">
             <div className="logo_container">
               <Link href='#'>

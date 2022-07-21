@@ -164,12 +164,9 @@ const PictureDialog = ({
                     Cancel
                   </button>
                   <span className='ml-auto'></span>
-                  {imgSrc && <button type="submit"
-                    className="inline-flex justify-center rounded-md border border-transparent bg-[#f24921] px-4 py-2 text-sm font-medium text-white hover:bg-[#f24921]/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                    onClick={handleDeleteButtonClick}
-                  >
+                  {imgSrc && <LoadingButton autoCapitalize="off" className="!capitalize !bg-[#f24921] !hover:bg-[#f24921]/80" type="submit" onClick={handleDeleteButtonClick} variant="contained" loading={isSubmitting}>
                     Delete
-                  </button>}
+                  </LoadingButton>}
                   {!!files.length && <LoadingButton autoCapitalize="off" className="!capitalize bg-[#2A85FF]" type="submit" onClick={handleUploadButtonClick} variant="contained" disabled={!files.length} loading={isSubmitting}>
                     Upload
                   </LoadingButton>}
