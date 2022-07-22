@@ -347,8 +347,8 @@ const Individual = () => {
               </div>}
               </div>
               <div className='ml-auto'>
-                <IconButton aria-label="edit" color="primary" onClick={openBasicInfoModal}>
-                  <PencilIcon color='#2A85FF' className="h-5 w-5"></PencilIcon>
+                <IconButton aria-label="edit" className='bg-[rgb(42,133,255)]/5' onClick={openBasicInfoModal}>
+                  <PencilIcon color='#2A85FF' width={16} height={16}></PencilIcon>
                 </IconButton>
               </div>
             </div>
@@ -380,8 +380,8 @@ const Individual = () => {
               <div className='flex flex-row justify-between items-center'>
                 <p className={classNames("font-semibold", styles.sectionTitle)}>Experience</p>
                 {!!experiences.length && <div className='flex flex-row space-x-3'>
-                  <IconButton aria-label="add" color="primary" onClick={onExperienceItemClick(null)}>
-                    <PlusIcon color='#2A85FF' className="h-5 w-5"></PlusIcon>
+                  <IconButton aria-label="add" className='bg-[rgb(42,133,255)]/5' onClick={onExperienceItemClick(null)}>
+                    <PlusIcon color='#2A85FF' width={16} height={16}></PlusIcon>
                   </IconButton>
                 </div>}
               </div>
@@ -415,8 +415,8 @@ const Individual = () => {
               <div className='flex flex-row justify-between items-center'>
                 <p className={classNames("font-semibold", styles.sectionTitle)}>Education</p>
                 {!!educations.length && <div className='flex flex-row space-x-3'>
-                  <IconButton aria-label="add" color="primary" onClick={onEducationItemClick(null)}>
-                    <PlusIcon color='#2A85FF' className="h-5 w-5"></PlusIcon>
+                  <IconButton className='bg-[rgb(42,133,255)]/5' aria-label="add" color="primary" onClick={onEducationItemClick(null)}>
+                    <PlusIcon color='#2A85FF' width={16} height={16}></PlusIcon>
                   </IconButton>
                 </div>}
               </div>
@@ -452,8 +452,8 @@ const Individual = () => {
               <div className='flex flex-row justify-between items-center'>
                 <p className={classNames("font-semibold", styles.sectionTitle)}>Skills</p>
                 {!!skills.length && <div className='flex flex-row space-x-3'>
-                  <IconButton aria-label="add" color="primary" onClick={openSkillsModal}>
-                    <PencilIcon color='#2A85FF' className="h-5 w-5"></PencilIcon>
+                  <IconButton aria-label="add" className='bg-[rgb(42,133,255)]/5' color="primary" onClick={openSkillsModal}>
+                    <PencilIcon color='#2A85FF' width={16} height={16}></PencilIcon>
                   </IconButton>
                 </div>}
               </div>
@@ -472,8 +472,8 @@ const Individual = () => {
               <div className='flex flex-row justify-between items-center'>
                 <p className={classNames("font-semibold", styles.sectionTitle)}>Certificates</p>
                 {!!myCertificates.length && <div className='flex flex-row space-x-3'>
-                  <IconButton aria-label="add" color="primary" onClick={openMyCertificateModal}>
-                    <PencilIcon color='#2A85FF' className="h-5 w-5"></PencilIcon>
+                  <IconButton aria-label="add" className='bg-[rgb(42,133,255)]/5' onClick={openMyCertificateModal}>
+                    <PencilIcon color='#2A85FF' width={16} height={16}></PencilIcon>
                   </IconButton>
                 </div>}
               </div>

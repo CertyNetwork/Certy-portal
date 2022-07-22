@@ -2,9 +2,10 @@ import React, { FunctionComponent, useContext, useEffect, useState } from 'react
 import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { MenuIcon, XIcon } from '@heroicons/react/outline'
-import { Button } from '@mui/material'
+import { Button, Divider } from '@mui/material'
 import Image from 'next/image'
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import logo from '../assets/images/logo.png'
 import OurSolution from '../components/OurSolution';
 import { AuthContext } from '../contexts/auth-context'
@@ -26,6 +27,8 @@ function classNames(...classes) {
 export const MainLayout: FunctionComponent<MainLayoutProps> = ({
   children,
 }) => {
+  const router = useRouter();
+  console.log(router.asPath);
   const { login, logout, getAccountId, authenticated, isInitializing } = useContext(AuthContext)
   let [isAuthenticated, setIsAuthenticated] = useState(false);
   
@@ -75,6 +78,24 @@ export const MainLayout: FunctionComponent<MainLayoutProps> = ({
                           leaveTo="transform opacity-0 scale-95"
                         >
                           <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+                            {router.asPath !== '/' && <>
+                              <Menu.Item>
+                                {({ active }) => (
+                                  <a
+                                    onClick={() => router.push('/')}
+                                    className={classNames('cursor-pointer',
+                                      active ? 'bg-gray-100' : '',
+                                      'block px-4 py-2 text-sm text-[#1C1F27] font-semibold'
+                                    )}
+                                  >
+                                    My Profile
+                                  </a>
+                                )}
+                              </Menu.Item>
+                              <div className='py-1'>
+                                <Divider className='!border-[rgb(0,0,0)]/5' />
+                              </div>
+                            </>}
                             <Menu.Item>
                               {({ active }) => (
                                 <a

@@ -12,7 +12,7 @@ import { AuthContext } from '../contexts/auth-context'
 
 const Home: NextPage = () => {
   let [userType, setUserType] = useState(null)
-  let [isLoading, setIsLoading] = useState(false)
+  let [isLoading, setIsLoading] = useState(true)
   const { isInitializing, authenticated } = useContext(AuthContext)
 
   const getMyUserType = async () => {
