@@ -1,9 +1,10 @@
 
 import { Fragment, useContext } from "react";
 import { Transition, Dialog } from "@headlessui/react";
-import { InputLabel } from "@mui/material";
+import { InputLabel, IconButton } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { Formik } from "formik";
+import { XIcon } from '@heroicons/react/outline'
 import { ToastContext } from "../../contexts/toast-context";
 import { addAbout } from "../../apis/services/profile";
 import { TypesToast } from "../../contexts/toast-reducer";
@@ -61,8 +62,12 @@ const AddAboutMeDialog = ({
               leaveTo="opacity-0 scale-95"
             >
               <Dialog.Panel className="w-full max-w-xl transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900">
-                  {!!about ? 'Update About' : 'Add About'}
+                <Dialog.Title as="div" className="flex items-center text-lg font-medium leading-6 text-gray-900">
+                  <span>{!!about ? 'Update About' : 'Add About'}</span>
+                  <span className="ml-auto"></span>
+                  <IconButton aria-label="edit" color="primary" onClick={() => onCancelButtonClick()}>
+                    <XIcon color='#2A85FF' width={20} height={20}></XIcon>
+                  </IconButton>
                 </Dialog.Title>
                 <div className="mt-4">
                   <Formik

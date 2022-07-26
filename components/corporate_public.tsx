@@ -147,9 +147,9 @@ const CorporatePublic = ({profile, accountId}) => {
           
             <div className="flex flex-col flex-0 lg:flex-row items-center max-w-5xl w-full mx-auto px-4 lg:px-16 lg:h-18 bg-card">
               {isAvatarImageLoading ? (
-                <Skeleton animation="wave" variant='circular' width={128} height={128} className={classNames("mt-[-26px] z-50 lg:mt-[-22px] rounded-full cursor-pointer", styles.profilePicture)}></Skeleton>
+                <Skeleton animation="wave" variant='circular' width={128} height={128} className={classNames("mt-[-26px] z-0 lg:mt-[-22px] rounded-full cursor-pointer", styles.profilePicture)}></Skeleton>
               ) : (
-                <div className={classNames("mt-[-26px] z-50 lg:mt-[-22px] rounded-full", styles.profilePicture)}>
+                <div className={classNames("mt-[-26px] z-0 lg:mt-[-22px] rounded-full", styles.profilePicture)}>
                   {avatar && <Image onClick={onAvatarClick()} loader={defaultImageLoader} src={avatar} width={128} height={128} alt='avatar' className='w-32 h-32 rounded-full ring-4 ring-white cursor-pointer' />}
                   {!avatar && <div className='bg-[#2A85FF] flex items-center justify-center w-32 h-32 rounded-full ring-4 ring-white'><EmptyUserIcon></EmptyUserIcon></div>}
                 </div>

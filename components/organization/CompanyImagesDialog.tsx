@@ -2,6 +2,7 @@
 import { Fragment, useCallback, useContext, useState } from "react";
 import { Transition, Dialog } from "@headlessui/react";
 import LoadingButton from "@mui/lab/LoadingButton";
+import { IconButton } from '@mui/material'
 import { useDropzone } from 'react-dropzone';
 import { XIcon } from '@heroicons/react/outline';
 import { TypesToast } from "../../contexts/toast-reducer";
@@ -130,8 +131,12 @@ const CompanyImagesDialog = ({
               leaveTo="opacity-0 scale-95"
             >
               <Dialog.Panel className="w-full max-w-xl transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900">
-                  Company Images
+                <Dialog.Title as="div" className="text-lg font-medium leading-6 text-gray-900">
+                  <span>Company Images</span>
+                  <span className="ml-auto"></span>
+                  <IconButton aria-label="edit" color="primary" onClick={() => onCancelButtonClick()}>
+                    <XIcon color='#2A85FF' width={20} height={20}></XIcon>
+                  </IconButton>
                 </Dialog.Title>
                 <div className="mt-4 mx-auto min-h-[300px] flex flex-row flex-wrap">
                   <div {...getRootProps({className: 'dropzone'})}>

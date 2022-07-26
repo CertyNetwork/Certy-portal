@@ -1,10 +1,11 @@
 
 import { Fragment, useEffect, useState } from "react";
 import { Transition, Dialog } from "@headlessui/react";
-import { alpha, Chip, InputBase, styled } from "@mui/material";
+import { alpha, Chip, InputBase, styled, IconButton } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { Field, Formik } from "formik";
 import FormControl from '@mui/material/FormControl';
+import { XIcon } from '@heroicons/react/outline';
 import { addSkills } from "../../apis/services/profile";
 
 function classNames(...classes) {
@@ -113,8 +114,12 @@ const AddSkillsDialog = ({
               leaveTo="opacity-0 scale-95"
             >
               <Dialog.Panel className="w-full max-w-xl transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900">
-                  Add Skills
+                <Dialog.Title as="div" className="flex items-center text-lg font-medium leading-6 text-gray-900">
+                  <span>Add Skills</span>
+                  <span className="ml-auto"></span>
+                  <IconButton aria-label="edit" color="primary" onClick={() => onCancelButtonClick()}>
+                    <XIcon color='#2A85FF' width={20} height={20}></XIcon>
+                  </IconButton>
                 </Dialog.Title>
                 <div className="mt-4">
                   <Formik

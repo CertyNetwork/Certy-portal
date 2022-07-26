@@ -1,13 +1,11 @@
 
 import { Fragment, useContext, useEffect, useCallback, useState } from "react";
 import Image, { ImageLoaderProps } from 'next/image'
-import { gql, useApolloClient } from "@apollo/client";
 import { Transition, Dialog, Listbox } from "@headlessui/react";
-import { Checkbox } from "@mui/material";
+import { Checkbox, IconButton } from "@mui/material";
+import { XIcon } from '@heroicons/react/outline'
 import { ToastContext } from "../../contexts/toast-context";
 import { addCertificates } from "../../apis/services/profile";
-import { TypesToast } from "../../contexts/toast-reducer";
-import { AuthContext } from '../../contexts/auth-context'
 import { Certificate } from "../../models/Certificate";
 
 interface MyCertificatesDialogProps {
@@ -79,8 +77,12 @@ const MyCertificatesDialog = ({
               leaveTo="opacity-0 scale-95"
             >
               <Dialog.Panel className="w-full max-w-xl transform overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all">
-                <Dialog.Title as="h3" className="px-6 py-3 text-lg font-medium leading-6 text-gray-900">
+                <Dialog.Title as="div" className="flex items-center px-6 py-3 text-lg font-medium leading-6 text-gray-900">
                   List of Certificate
+                  <span className="ml-auto"></span>
+                  <IconButton aria-label="edit" color="primary" onClick={() => onCancelButtonClick()}>
+                    <XIcon color='#2A85FF' width={20} height={20}></XIcon>
+                  </IconButton>
                 </Dialog.Title>
                 <div className="bg-[#F9FAFF]">
                   <Listbox multiple value={selectedCerts} onChange={setSelectedCerts}>

@@ -1,15 +1,13 @@
 
 import { Fragment, useContext } from "react";
 import dayjs from 'dayjs';
-// import dynamic from 'next/dynamic';
 import { Transition, Dialog } from "@headlessui/react";
-import { alpha, InputBase, InputLabel, Select, MenuItem, styled } from "@mui/material";
+import { alpha, InputBase, InputLabel, Select, MenuItem, styled, IconButton } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { Formik } from "formik";
 import FormControl from '@mui/material/FormControl';
+import { XIcon } from '@heroicons/react/outline'
 import { addExperience } from '../../apis/services/profile'
-// const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
-// import 'react-quill/dist/quill.snow.css';
 import { ToastContext } from "../../contexts/toast-context";
 import { TypesToast } from "../../contexts/toast-reducer";
 import { Experience } from "../../models/Experience";
@@ -144,8 +142,12 @@ const AddExperienceDialog = ({
               leaveTo="opacity-0 scale-95"
             >
               <Dialog.Panel className="w-full max-w-xl transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900">
-                  {ex?.id ? 'Update Work Experience' : 'Add Work Experience'}
+                <Dialog.Title as="div" className="flex items-center text-lg font-medium leading-6 text-gray-900">
+                  <span>{ex?.id ? 'Update Work Experience' : 'Add Work Experience'}</span>
+                  <span className="ml-auto"></span>
+                  <IconButton aria-label="edit" color="primary" onClick={() => onCancelButtonClick()}>
+                    <XIcon color='#2A85FF' width={20} height={20}></XIcon>
+                  </IconButton>
                 </Dialog.Title>
                 <div className="mt-6">
                   <Formik

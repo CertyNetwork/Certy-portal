@@ -261,9 +261,9 @@ const Corporate = () => {
           
             <div className="flex flex-col flex-0 lg:flex-row items-center max-w-5xl w-full mx-auto px-4 lg:px-16 lg:h-18 bg-card">
               {isAvatarImageLoading ? (
-                <Skeleton animation="wave" variant='circular' width={128} height={128} className={classNames("mt-[-26px] z-50 lg:mt-[-22px] rounded-full cursor-pointer", styles.profilePicture)}></Skeleton>
+                <Skeleton animation="wave" variant='circular' width={128} height={128} className={classNames("mt-[-26px] z-0 lg:mt-[-22px] rounded-full cursor-pointer", styles.profilePicture)}></Skeleton>
               ) : (
-                <div onClick={onAvatarClick} className={classNames("mt-[-26px] z-50 lg:mt-[-22px] rounded-full cursor-pointer", styles.profilePicture)}>
+                <div onClick={onAvatarClick} className={classNames("mt-[-26px] z-0 lg:mt-[-22px] rounded-full cursor-pointer", styles.profilePicture)}>
                   {avatar && <Image loader={defaultImageLoader} src={avatar} width={128} height={128} alt='avatar' className='w-32 h-32 rounded-full ring-4 ring-white' />}
                   {!avatar && <div className='bg-[#2A85FF] flex items-center justify-center w-32 h-32 rounded-full ring-4 ring-white'><EmptyUserIcon></EmptyUserIcon></div>}
                 </div>
@@ -283,7 +283,7 @@ const Corporate = () => {
                 </div>}
               </div>
               <div className='ml-auto'>
-                <IconButton aria-label="edit" className='bg-[rgb(42,133,255)]/5' onClick={openBasicInfoModal}>
+                <IconButton aria-label="edit" className='!bg-[rgb(42,133,255)]/5' onClick={openBasicInfoModal}>
                   <PencilIcon color='#2A85FF' width={16} height={16}></PencilIcon>
                 </IconButton>
               </div>
@@ -315,7 +315,7 @@ const Corporate = () => {
               <div className='flex flex-row justify-between items-center'>
                 <p className={classNames("font-semibold", styles.sectionTitle)}>Images</p>
                 {!!companyImages.length && <div className='flex flex-row space-x-3'>
-                  <IconButton aria-label="add" className='bg-[rgb(42,133,255)]/5' onClick={openCompanyImagesModal}>
+                  <IconButton aria-label="add" className='!bg-[rgb(42,133,255)]/5' onClick={openCompanyImagesModal}>
                     <PlusIcon color='#2A85FF' width={16} height={16}></PlusIcon>
                   </IconButton>
                 </div>}
@@ -341,7 +341,7 @@ const Corporate = () => {
               <div className='flex flex-row justify-between items-center'>
                 <p className={classNames("font-semibold", styles.sectionTitle)}>Organization Information</p>
                 {companyInfo && <div className='flex flex-row space-x-3'>
-                  <IconButton aria-label="edit" className='bg-[rgb(42,133,255)]/5' onClick={openBasicInfoModal}>
+                  <IconButton aria-label="edit" className='!bg-[rgb(42,133,255)]/5' onClick={openBasicInfoModal}>
                     <PencilIcon color='#2A85FF' width={16} height={16}></PencilIcon>
                   </IconButton>
                 </div>}
